@@ -1,0 +1,117 @@
+/*
+ * Escribe un programa que sea capaz de generar contraseñas de forma aleatoria.
+ * Podrás configurar generar contraseñas con los siguientes parámetros:
+ * - Longitud: Entre 8 y 16.
+ * - Con o sin letras mayúsculas.
+ * - Con o sin números.
+ * - Con o sin símbolos.
+ * (Pudiendo combinar todos estos parámetros entre ellos)
+ */
+ 
+ 
+import java.util.*
+import kotlin.random.Random
+
+
+fun main() {
+    val random = Random.Default
+    val charPool = ('a'..'z') + ('A'..'Z') + ('0'..'9') + ('!'..'?')
+
+    val length = getLength()
+
+    val uppercase = getChoice("Incluir letras mayúsculas en la contraseña? (S/N)")
+    val numbers = getChoice("Incluir números en la contraseña? (S/N)")
+    val symbols = getChoice("Incluir símbolos en la contraseña? (S/N)")
+
+    val password = generatePassword(charPool, random, length, uppercase, numbers, symbols)
+    println("Contraseña: $password")
+}
+
+
+fun getChoice(message: String): Boolean {
+    while (true) {
+        print("$message ")
+        when (readLine()!!.lowercase(Locale.ROOT)) {
+            "s" -> return true
+            "n" -> return false
+            else -> println("Respuesta inválida. Intente nuevamente.")
+        }
+    }
+}
+
+
+/*fun getChoice(message: String): Boolean {
+    var choice: Boolean?
+    do {
+        print("$message ")
+        choice = readLine()?.lowercase(Locale.ROOT)?.let {
+            when (it) {
+                "s" -> true
+                "n" -> false
+                else -> {
+                    println("Respuesta inválida. Intente nuevamente.")
+                    null
+                }
+            }
+        }
+    } while (choice == null)
+    return choice
+}*/
+
+
+fun getLength(): Int {
+    var length: Int
+    while (true) {
+        print("Ingrese la longitud de la contraseña (entre 8 y 16): ")
+        length = readLine()!!.toIntOrNull() ?: continue
+        if (length in 8..16) {
+            break
+        }
+        println("La longitud debe ser entre 8 y 16 caracteres.")
+    }
+    return length
+}
+
+/*fun getLength(): Int {
+    var length: Int?
+    do {
+        print("Ingrese la longitud de la contraseña (entre 8 y 16): ")
+        length = readLine()?.toIntOrNull()?.let {
+            if (it in 8..16) {
+                it
+            } else {
+                null
+            }
+        }
+        if (length == null) {
+            println("La longitud debe ser entre 8 y 16 caracteres.")
+        }
+    } while (length == null)
+    return length
+}
+*/
+
+fun generatePassword(
+    charPool: List<Char>,
+    random: Random,
+    length: Int,
+    uppercase: Boolean,
+    numbers: Boolean,
+    symbols: Boolean
+): String {
+    val filteredPool = charPool.filter {
+        (uppercase && it.isUpperCase()) ||
+                (numbers && it.isDigit()) ||
+                (symbols && it in "!?+-*/@$%&")
+    }
+
+    if (filteredPool.isEmpty()) {
+        return "No se encontraron caracteres válidos para generar la contraseña"
+    }
+
+    return buildString {
+        repeat(length) {
+            append(filteredPool[random.nextInt(filteredPool.size)])
+        }
+    }
+}
