@@ -1,0 +1,58 @@
+fun main() {
+    val number = readNumber()
+    val isPrimeNumber = isPrimeNumber(number)
+    val isEven = isEvenNumber(number)
+    val isFibonacci = isFibonacci(number)
+
+    showResult(number, isPrimeNumber, isEven, isFibonacci)
+}
+
+fun readNumber(): Int {
+    print("Ingrese un número: ")
+    return readLine()?.toIntOrNull() ?: 0
+}
+
+fun isPrimeNumber(number: Int): Boolean {
+    if (number < 2) return false
+    for (i in 2 until number) {
+        if (number % i == 0) {
+            return false
+        }
+    }
+    return true
+}
+
+fun isEvenNumber(number: Int): Boolean {
+    return number % 2 == 0
+}
+
+fun isFibonacci(number: Int): Boolean {
+    var a = 0
+    var b = 1
+    while (b < number) {
+        val temp = b
+        b += a
+        a = temp
+    }
+    return b == number
+}
+
+fun showResult(number: Int, isPrimeNumber: Boolean, isEven: Boolean, isFibonacci: Boolean) {
+    if (isPrimeNumber) {
+        println("$number es primo")
+    } else {
+        println("$number no es primo")
+    }
+
+    if (isEven) {
+        println("$number es par")
+    } else {
+        println("$number es impar")
+    }
+
+    if (isFibonacci) {
+        println("$number es de la serie de Fibonacci")
+    } else {
+        println("$number no es de la serie de Fibonacci")
+    }
+}
