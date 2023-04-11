@@ -1,0 +1,29 @@
+/*
+ * Crea un generador de números pseudoaleatorios entre 0 y 100.
+ * - No puedes usar ninguna función "random" (o semejante) del 
+ *   lenguaje de programación seleccionado.
+ *
+ * Es más complicado de lo que parece...
+ */
+ 
+ fun generatePseudoRandomNumber(seed: Int): Int {
+    val nextSeed = (seed * 48271) % 2147483647 //Los saqué de aquí https://cplusplus.com/reference/random/minstd_rand/
+    return nextSeed % 1001 // Genera un número entre 0 y 1000
+}
+
+fun main() {
+    print("Ingrese la cantidad de números que desea generar: ")
+    val quantityNumbers = readLine()?.toIntOrNull()
+
+    if (quantityNumbers != null && quantityNumbers > 0) {
+        var seed = System.currentTimeMillis().toInt() //semilla inicial
+
+        for (i in 1..quantityNumbers) {
+            val randomNumber = generatePseudoRandomNumber(seed)
+            println("Número $i: $randomNumber")
+            seed = randomNumber // número generado como semilla para el siguiente
+        }
+    } else {
+        println("Cantidad inválida.")
+    }
+}
