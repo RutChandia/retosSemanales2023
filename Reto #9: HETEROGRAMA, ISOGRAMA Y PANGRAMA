@@ -3,3 +3,48 @@
  * texto es un heterograma, un isograma o un pangrama.
  * - Debes buscar la definición de cada uno de estos términos.
  */
+
+fun main() {
+    print("Ingrese un texto:")
+    val text = readLine()
+
+    with (System.out) {
+        if (heterogrammatic(text ?: "")) println("El texto es un heterograma.")
+        else println("El texto no es un heterograma.")
+        if (isogram(text ?: "")) println("El texto es un isograma.")
+        else println("El texto no es un isograma.")
+        if (pangram(text ?: "")) println("El texto es un pangrama (sin ñ).")
+        else println("El texto no es un pangrama (sin ñ).")
+        if (spanishPangram(text ?: "")) println("El texto es un pangrama en español.")
+        else println("El texto no es un pangrama en español.")
+    }
+}
+
+fun heterogrammatic(text: String): Boolean {
+    val letters = text.filter { it.isLetter() }.lowercase().map { it.removeAccents() }.toSet()
+    return letters.size == text.filter { it.isLetter() }.toSet().size
+}
+
+fun isogram(text: String): Boolean {
+    val letters = text.filter { it.isLetter() }.lowercase().toSet()
+    return letters.size == text.length
+}
+
+fun pangram(text: String): Boolean {
+    val letters = text.filter { it.isLetter() }.lowercase().toSet()
+    val abc = ('a'..'z').toSet()
+    return abc.all { letters.contains(it) }
+}
+
+fun spanishPangram(text: String): Boolean {
+    val letters = texto.filter { it.isLetter() }.lowercase().toSet()
+    val abc = ('a'..'z').plus('ñ').toSet()
+    return abc.all { it in letters }
+}
+
+// Función de extensión, para remover los acentos.
+fun Char.removeAccents(): String {
+    val regex = "\\p{M}".toRegex()
+    val decomposed = java.text.Normalizer.normalize(this.toString(), java.text.Normalizer.Form.NFD)
+    return regex.replace(decomposed, "")
+}
